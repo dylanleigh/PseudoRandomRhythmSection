@@ -7,14 +7,17 @@ import fileinput
 import sys
 import random
 
-from music21 import note
 from music21.instrument import Piano, AltoSaxophone
+from music21.roman import RomanNumeral
 from music21.stream import Part, Measure, Score
 from music21.converter.subConverters import ConverterMusicXML
+from music21.note import Note
 
-DEBUG=True
 
-class Progression:
+DEBUG=True     # FIXME rm these
+
+
+class ProgressionGenerator:
    def __init__(self):
       self.chords = ['I']    # Work backwards from I
 
@@ -60,31 +63,49 @@ def abort_with_usage():
    sys.exit('Usage: autobebop.py > music.mxl\n')
 
 
-def init_song():
-   '''Initialise music21 with a new Sax/Piano score and return it.'''
-   score = Score()
-
-   # Add tracks/intstruments for SATB - names etc will be set automatically
-   piano_p = Part()
-   piano_p.insert(0, Piano())
-
-   alto_p = Part()
-   alto_p.insert(0, AltoSaxophone())
 
    return score
 
 
 def generate_song():
    '''Generate a random song and return as a Music21 score'''
-   # Initialise the score
-   score = init_song()
+   # Start with a blank score
+   score = Score()
 
-   # FIXME while song length too short
-   # Get a progression
+   # Add tracks/intstruments - names etc will be set automatically
+   piano = Part()
+   piano.insert(0, Piano())
+   score.insert(0,piano)
+
+   alto = Part()
+   alto.insert(0, AltoSaxophone())
+   score.insert(0,alto)
+
+   # Get a random progression
+   prog = ProgressionGenerator()
+   prog.generate(20)
+   if DEBUG:
+      print('Progression Chords: ', prog.chords)
+
+   # Go through the progression, adding a chord and a note
+   for chord in prog.chords:
+      duration = 4      # 4 beats per chord TODO mix this up a bit
+
+      # Add to piano part
+      roman = RomanNumeral(chord)   # Convert string into a generic chord object
+      roman.quarterLength = duration
+      piano.append(roman)
+
+      # Create melody based on eighth-notes
+      for pos in range(0, duration * 2):
+         notes = [str(p) for p in roman.pitches]    # TODO expand potential notes
+         note = Note(random.choice(notes))
+         note.quarterLength = 0.5   # FIXME rests and mix up duration
+         alto.append(note)
 
    return score
 
 
 # start main function
 if __name__ == '__main__':
-   generate_song().write("musicxml")
+   print(generate_song().write("musicxml"))
