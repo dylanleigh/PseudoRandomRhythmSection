@@ -12,6 +12,7 @@ from music21.roman import RomanNumeral
 from music21.stream import Part, Measure, Score
 from music21.converter.subConverters import ConverterMusicXML
 from music21.note import Note
+from music21.chord import Chord
 
 
 class ProgressionGenerator:
@@ -80,12 +81,13 @@ def generate_song():
 
    # Go through the progression, adding a chord and a note
    for chord in prog.chords:
-      duration = 4      # 4 beats per chord TODO mix this up a bit
+      duration = random.choice((1,2,3,4))      # beats until chord change
 
-      # Add to piano part
+      # Add chord to piano part
       roman = RomanNumeral(chord)   # Convert string into a generic chord object
-      roman.quarterLength = duration
-      piano.append(roman)
+      roman.quarterLength = 1 # One per beat TODO mix up rhythm a bit
+      for pos in range(0, duration):
+         piano.append(Chord(roman))
 
       # Create melody based on eighth-notes
       for pos in range(0, duration * 2):
