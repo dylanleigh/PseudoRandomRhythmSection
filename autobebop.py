@@ -14,9 +14,6 @@ from music21.converter.subConverters import ConverterMusicXML
 from music21.note import Note
 
 
-DEBUG=True     # FIXME rm these
-
-
 class ProgressionGenerator:
    def __init__(self):
       self.chords = ['I']    # Work backwards from I
@@ -63,10 +60,6 @@ def abort_with_usage():
    sys.exit('Usage: autobebop.py > music.mxl\n')
 
 
-
-   return score
-
-
 def generate_song():
    '''Generate a random song and return as a Music21 score'''
    # Start with a blank score
@@ -84,8 +77,6 @@ def generate_song():
    # Get a random progression
    prog = ProgressionGenerator()
    prog.generate(20)
-   if DEBUG:
-      print('Progression Chords: ', prog.chords)
 
    # Go through the progression, adding a chord and a note
    for chord in prog.chords:
