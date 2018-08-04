@@ -60,6 +60,11 @@ def abort_with_usage():
    sys.exit('Usage: autobebop.py > music.mxl\n')
 
 
+def quaver_length():
+   '''Return a note length averaging to an eighth note'''
+   return random.choice((0.25,0.25, 0.5,0.5,0.5,0.5, 1.0))
+
+
 def generate_song():
    '''Generate a random song and return as a Music21 score'''
    # Start with a blank score
@@ -78,6 +83,11 @@ def generate_song():
    prog = ProgressionGenerator()
    prog.generate(20)
 
+   # FIXME for loops need to be changed to a fill-until-duration to
+   # allow for mismatching rhythms that change chords at the same time
+   # and are the same song length
+   # OR update pos inside the loop... ?
+
    # Go through the progression, adding a chord and a note
    for chord in prog.chords:
       duration = random.choice((1,2,2,3,4,4,4,5,6))      # beats until chord change
@@ -86,14 +96,17 @@ def generate_song():
       roman = RomanNumeral(chord)   # Convert string into a generic chord object
       roman.quarterLength = 1 # One per beat TODO mix up rhythm a bit
       for pos in range(0, duration):
-         piano.append(Chord(roman))
+         if random.randint(0,2):
+            piano.append(Chord(roman))
+         else:
+            piano.append(Rest(quarterLength=1))
 
       # Create melody based on eighth-notes
       for pos in range(0, duration * 2):
 
          # Get chord notes, add scale notes, these are our potential notes
          chord_notes = [str(p) for p in roman.pitches]
-         notes = chord_notes + ['C','D','E','F','G','A','B']   # FIXME ugh
+         notes = chord_notes + chord_notes + ['C','D','E','F','G','A','B']   # FIXME ugh
 
          # Add a note or a rest
          # FIXME we choose rest here because we want to weight certain
