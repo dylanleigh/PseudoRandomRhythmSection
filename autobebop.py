@@ -11,7 +11,7 @@ from music21.instrument import Piano, AltoSaxophone
 from music21.roman import RomanNumeral
 from music21.stream import Part, Measure, Score
 from music21.converter.subConverters import ConverterMusicXML
-from music21.note import Note
+from music21.note import Note, Rest
 from music21.chord import Chord
 
 
@@ -23,11 +23,7 @@ class ProgressionGenerator:
       return str(self.chords)
 
    def before_I(self):
-      path = random.randint(0,1)
-      if path == 1:
-         return random.choice(['IV','V','viio'])
-      else:
-         return random.choice(['IV','V'])
+      return random.choice(['IV','IV','V','V','V7','V7','viio'])
 
    def before_ii(self):
       return random.choice(['I','iii','IV','vi'])
@@ -39,6 +35,9 @@ class ProgressionGenerator:
       return random.choice(['I','iii','vi'])
 
    def before_V(self):
+      return random.choice(['I','ii','IV','vi'])
+
+   def before_V7(self):
       return random.choice(['I','ii','IV','vi'])
 
    def before_vi(self):
@@ -81,7 +80,7 @@ def generate_song():
 
    # Go through the progression, adding a chord and a note
    for chord in prog.chords:
-      duration = random.choice((1,2,3,4))      # beats until chord change
+      duration = random.choice((1,2,2,3,4,4,4,5,6))      # beats until chord change
 
       # Add chord to piano part
       roman = RomanNumeral(chord)   # Convert string into a generic chord object
@@ -91,10 +90,20 @@ def generate_song():
 
       # Create melody based on eighth-notes
       for pos in range(0, duration * 2):
-         notes = [str(p) for p in roman.pitches]    # TODO expand potential notes
-         note = Note(random.choice(notes))
-         note.quarterLength = 0.5   # FIXME rests and mix up duration
-         alto.append(note)
+
+         # Get chord notes, add scale notes, these are our potential notes
+         chord_notes = [str(p) for p in roman.pitches]
+         notes = chord_notes + ['C','D','E','F','G','A','B']   # FIXME ugh
+
+         # Add a note or a rest
+         # FIXME we choose rest here because we want to weight certain
+         # notes, durations etc.
+         if random.randint(0,2):
+            note = Note(random.choice(notes))
+            note.quarterLength = 0.5
+            alto.append(note)
+         else:
+            alto.append(Rest(quarterLength=0.5))
 
    return score
 
