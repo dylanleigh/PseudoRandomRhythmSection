@@ -7,7 +7,7 @@ import fileinput
 import sys
 import random
 
-from music21.instrument import Piano, Bass
+from music21.instrument import Piano, AcousticBass
 from music21.roman import RomanNumeral
 from music21.stream import Part, Measure, Score
 from music21.converter.subConverters import ConverterMusicXML
@@ -77,7 +77,7 @@ def generate_song():
    score.insert(0,piano)
 
    bass = Part()
-   bass.insert(0, Bass())
+   bass.insert(0, AcousticBass())
    score.insert(0,bass)
 
    # Get a random progression
@@ -96,11 +96,17 @@ def generate_song():
       # Add chord to piano part
       roman = RomanNumeral(chord)   # Convert string into a generic chord object
       roman.quarterLength = 1 # One per beat TODO mix up rhythm a bit
-      for pos in range(0, duration):
+      for pos in range(0, duration * 2):
          if random.randint(0,2):
-            piano.append(Chord(roman))
+            chord = Chord(roman)
+#            if pos < duration-1 and random.randint(0,2):
+#               chord.quarterLength=1
+#               pos+=1
+#            else:
+            chord.quarterLength=0.5
+            piano.append(chord)
          else:
-            piano.append(Rest(quarterLength=1))
+            piano.append(Rest(quarterLength=0.5))
 
       # Create quarter note walking bassline
       for pos in range(0, duration):
@@ -110,6 +116,8 @@ def generate_song():
          note = Note(chord_notes[pos%len(chord_notes)])
          note.octave -= 2
          bass.append(note)
+
+         # FIXME ending if last chord
 
    return score
 
