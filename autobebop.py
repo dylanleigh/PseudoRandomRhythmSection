@@ -7,12 +7,13 @@ import fileinput
 import sys
 import random
 
-from music21.instrument import Piano, AltoSaxophone
+from music21.instrument import Piano, Bass
 from music21.roman import RomanNumeral
 from music21.stream import Part, Measure, Score
 from music21.converter.subConverters import ConverterMusicXML
 from music21.note import Note, Rest
 from music21.chord import Chord
+#from music21.interval import Interval
 
 
 class ProgressionGenerator:
@@ -75,9 +76,9 @@ def generate_song():
    piano.insert(0, Piano())
    score.insert(0,piano)
 
-   alto = Part()
-   alto.insert(0, AltoSaxophone())
-   score.insert(0,alto)
+   bass = Part()
+   bass.insert(0, Bass())
+   score.insert(0,bass)
 
    # Get a random progression
    prog = ProgressionGenerator()
@@ -101,22 +102,14 @@ def generate_song():
          else:
             piano.append(Rest(quarterLength=1))
 
-      # Create melody based on eighth-notes
-      for pos in range(0, duration * 2):
-
-         # Get chord notes, add scale notes, these are our potential notes
+      # Create quarter note walking bassline
+      for pos in range(0, duration):
+         # Walk up and down chord notes
          chord_notes = [str(p) for p in roman.pitches]
-         notes = chord_notes + chord_notes + ['C','D','E','F','G','A','B']   # FIXME ugh
-
-         # Add a note or a rest
-         # FIXME we choose rest here because we want to weight certain
-         # notes, durations etc.
-         if random.randint(0,2):
-            note = Note(random.choice(notes))
-            note.quarterLength = 0.5
-            alto.append(note)
-         else:
-            alto.append(Rest(quarterLength=0.5))
+         # FIXME add reversed tail of walk here
+         note = Note(chord_notes[pos%len(chord_notes)])
+         note.octave -= 2
+         bass.append(note)
 
    return score
 
