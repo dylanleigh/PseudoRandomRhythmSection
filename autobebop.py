@@ -96,7 +96,10 @@ def generate_song():
          # the beat = more syncopated rhythm to piano
          if random.randint(0, 1 + filled%2):
             chord = Chord(roman.pitches)
-            # TODO chord inversions
+            # TODO ending riff at end of song
+
+            # FIXME chord inversion randomly
+
 
             # Randomly hold notes for longer if we have longer before
             # the next chord change TODO more stylish rhythm here
@@ -113,12 +116,12 @@ def generate_song():
       for pos in range(0, duration, 2):   # 2 as we want quarter notes, duration is in eigths
          # Walk up and down chord notes
          chord_notes = [str(p) for p in roman.pitches]
-         # TODO add reversed tail of walk here
+         # FIXME add reversed tail of walk here
          note = Note(chord_notes[pos%len(chord_notes)])  # Wrap back to start
          note.octave -= 2
          bass.append(note)
 
-         # FIXME ending if last chord
+         # TODO ending riff if last chord
 
    return score
 
