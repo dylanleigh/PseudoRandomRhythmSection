@@ -82,7 +82,7 @@ def generate_song():
 
    # Get a random progression
    prog = ProgressionGenerator()
-   prog.generate(10)       # TODO longer, make CLI opt
+   prog.generate(15)       # TODO longer, make CLI opt
 
    # Go through the progression, adding a comp for each chord
    for chord_choice in prog.chords:
@@ -98,14 +98,11 @@ def generate_song():
             # the next chord change
             length = random.randint(1,duration-filled)
             chord.quarterLength = length/2.0      # length is in eighths
-            print chord.quarterLength
             piano.append(chord)
             filled += length
-            print (length, filled, duration)
          else:
             piano.append(Rest(quarterLength=0.5))
             filled += 1
-            print ("rest", filled, duration)
 
       # Create quarter note walking bassline
       for pos in range(0, duration, 2):   # 2 as we want quarter notes, duration is in eigths
