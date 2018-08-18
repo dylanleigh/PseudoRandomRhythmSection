@@ -92,11 +92,16 @@ def generate_song():
       # Add piano part
       filled = 0
       while filled < duration:
-         if random.randint(0,2):
+         # 1/3 chance to rest if off beat , 1/2 chance to rest if on
+         # the beat = more syncopated rhythm to piano
+         if random.randint(0, 1 + filled%2):
             chord = Chord(roman.pitches)
+            # TODO chord inversions
+
             # Randomly hold notes for longer if we have longer before
-            # the next chord change
+            # the next chord change TODO more stylish rhythm here
             length = random.randint(1,duration-filled)
+
             chord.quarterLength = length/2.0      # length is in eighths
             piano.append(chord)
             filled += length
@@ -108,7 +113,7 @@ def generate_song():
       for pos in range(0, duration, 2):   # 2 as we want quarter notes, duration is in eigths
          # Walk up and down chord notes
          chord_notes = [str(p) for p in roman.pitches]
-         # FIXME add reversed tail of walk here
+         # TODO add reversed tail of walk here
          note = Note(chord_notes[pos%len(chord_notes)])  # Wrap back to start
          note.octave -= 2
          bass.append(note)
@@ -120,4 +125,4 @@ def generate_song():
 
 # start main function
 if __name__ == '__main__':
-   print(generate_song().write("musicxml"))
+   print("musescore " + generate_song().write("musicxml"))
