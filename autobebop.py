@@ -82,38 +82,37 @@ def generate_song():
 
    # Get a random progression
    prog = ProgressionGenerator()
-   prog.generate(20)
+   prog.generate(10)       # TODO longer, make CLI opt
 
-   # FIXME for loops need to be changed to a fill-until-duration to
-   # allow for mismatching rhythms that change chords at the same time
-   # and are the same song length
-   # OR update pos inside the loop... ?
+   # Go through the progression, adding a comp for each chord
+   for chord_choice in prog.chords:
+      duration = random.choice((2,4,4,6,8,8,8,10,12))  # eigths until chord change
+      roman = RomanNumeral(chord_choice)   # Convert string into a generic Roman I/IV/etc chord
 
-   # Go through the progression, adding a chord and a note
-   for chord in prog.chords:
-      duration = random.choice((1,2,2,3,4,4,4,5,6))      # beats until chord change
-
-      # Add chord to piano part
-      roman = RomanNumeral(chord)   # Convert string into a generic chord object
-      roman.quarterLength = 1 # One per beat TODO mix up rhythm a bit
-      for pos in range(0, duration * 2):
+      # Add piano part
+      filled = 0
+      while filled < duration:
          if random.randint(0,2):
-            chord = Chord(roman)
-#            if pos < duration-1 and random.randint(0,2):
-#               chord.quarterLength=1
-#               pos+=1
-#            else:
-            chord.quarterLength=0.5
+            chord = Chord(roman.pitches)
+            # Randomly hold notes for longer if we have longer before
+            # the next chord change
+            length = random.randint(1,duration-filled)
+            chord.quarterLength = length/2.0      # length is in eighths
+            print chord.quarterLength
             piano.append(chord)
+            filled += length
+            print (length, filled, duration)
          else:
             piano.append(Rest(quarterLength=0.5))
+            filled += 1
+            print ("rest", filled, duration)
 
       # Create quarter note walking bassline
-      for pos in range(0, duration):
+      for pos in range(0, duration, 2):   # 2 as we want quarter notes, duration is in eigths
          # Walk up and down chord notes
          chord_notes = [str(p) for p in roman.pitches]
          # FIXME add reversed tail of walk here
-         note = Note(chord_notes[pos%len(chord_notes)])
+         note = Note(chord_notes[pos%len(chord_notes)])  # Wrap back to start
          note.octave -= 2
          bass.append(note)
 
