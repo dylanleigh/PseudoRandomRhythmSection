@@ -82,8 +82,6 @@ def add_piano_riff(roman, duration, piano):
          # XXX: Must deepcopy, do not change original or it will break bassline
          chord = Chord(deepcopy(roman.pitches))
 
-         # FIXME ending riff at end of song - ??
-
          # invert chord randomly, root inversion twice as likely as others
          max_inv=len(chord.pitches)
          chord.inversion(random.randint(0,max_inv)%max_inv)
@@ -104,6 +102,35 @@ def add_piano_riff(roman, duration, piano):
       else:
          piano.append(Rest(quarterLength=0.5))
          filled += 1
+
+
+def add_piano_closing(roman, duration, piano):
+   '''Generate a closing riff and add it to the keyboard part'''
+   filled = 0
+   length_weight = 2    # Longer notes later in the bar
+   root = roman.root()  # Root pitch of the chord (NOT a note object)
+   while filled < duration:
+      # TODO DRY with other piano func
+      chord = Chord(deepcopy(roman.pitches))
+
+      # invert chord randomly, root inversion twice as likely as others
+      max_inv=len(chord.pitches)
+      chord.inversion(random.randint(0,max_inv)%max_inv)
+
+      # Add an extra root note 1 octave lower
+      root = deepcopy(chord.root())
+      root.octave -= 1
+      chord.add(root)
+      # TODO above same procedure as main riff func, but we should
+      # make more fancy
+
+      # Rhythm similar to bass method below
+      length = min(random.randint(1,length_weight),duration-filled) # cap at time left
+      chord.quarterLength = length/2.0
+
+      piano.append(chord)
+      filled += length
+      length_weight += length # Longer notes later in the bar
 
 
 def add_bass_walk(roman, duration, bass):
@@ -175,7 +202,7 @@ def generate_song():
       # TODO drum part
 
    # ending riff on last chord
-   add_piano_riff(RomanNumeral('I'), 8, piano)     # FIXME TODO
+   add_piano_closing(RomanNumeral('I'), 8, piano)
    add_bass_closing(RomanNumeral('I'), 8, bass)
    return score
 
