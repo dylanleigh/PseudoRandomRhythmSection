@@ -3,7 +3,7 @@
 autobebop - A chord/melody generator
 ::::::::::::::::::::::::::::::::::::
 
-TODO: Rename - AutoJazzComp ? RandomRhythmSection
+TODO: Rename - AutoJazzComp ? PseudoRandomRhythmSection
 
 Dylan Leigh August 2018
 

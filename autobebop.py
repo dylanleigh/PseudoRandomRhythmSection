@@ -3,9 +3,9 @@
 # TODO frontmatter goes here
 # 
 
-import fileinput
 import sys
 import random
+from copy import deepcopy
 
 from music21.instrument import Piano, AcousticBass
 from music21.roman import RomanNumeral
@@ -86,7 +86,7 @@ def generate_song():
 
    # Go through the progression, adding a comp for each chord
    for chord_choice in prog.chords:
-      duration = random.choice((2,4,4,6,8,8,8,10,12))  # eigths until chord change
+      duration = random.choice((2,4,4,4,6,6,8,8,8,8,10,12,16))  # eigths until chord change
       roman = RomanNumeral(chord_choice)   # Convert string into a generic Roman I/IV/etc chord
 
       # Add piano part
@@ -95,15 +95,19 @@ def generate_song():
          # 1/3 chance to rest if off beat , 1/2 chance to rest if on
          # the beat = more syncopated rhythm to piano
          if random.randint(0, 1 + filled%2):
-            chord = Chord(roman.pitches)
+            # XXX: Must deepcopy, do not change original or it will break bassline
+            chord = Chord(deepcopy(roman.pitches))
+
             # TODO ending riff at end of song
 
-            # FIXME chord inversion randomly
-
+            # invert chord randomly TODO something smarter here
+            chord.inversion(random.randint(0,len(chord.pitches)-1))
 
             # Randomly hold notes for longer if we have longer before
             # the next chord change TODO more stylish rhythm here
-            length = random.randint(1,duration-filled)
+            # TODO: ?? max_length = max(duration-filled, 8)      # Cap at 1 bar
+            max_length = duration-filled
+            length = random.randint(1,max_length)
 
             chord.quarterLength = length/2.0      # length is in eighths
             piano.append(chord)
