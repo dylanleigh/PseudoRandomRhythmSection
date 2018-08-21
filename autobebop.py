@@ -169,7 +169,8 @@ def generate_song():
    '''Generate a random song and return as a Music21 score'''
    # Start with a blank score
    score = Score()
-   # TODO: Add swing rhythm indicator outside musescore
+   # TODO: Add swing rhythm indicator without having to do it manually
+   # in musescore (how to with music21?)
 
    # Add tracks/intstruments - names etc will be set automatically
    piano = Part()
@@ -180,11 +181,11 @@ def generate_song():
    bass.insert(0, AcousticBass())
    score.insert(0,bass)
 
-   #hihat = Part()   TODO
+   #hihat = Part()   TODO drum kit
 
    # Get a random progression
    prog = ProgressionGenerator()
-   prog.generate(15)       # TODO longer, make CLI opt
+   prog.generate(15)       # TODO make CLI opt
 
    # Go through the progression, adding a comp for each chord
    for chord_choice in prog.chords:
