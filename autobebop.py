@@ -86,7 +86,7 @@ def generate_song():
 
    # Go through the progression, adding a comp for each chord
    for chord_choice in prog.chords:
-      duration = random.choice((2,4,4,4,6,6,8,8,8,8,10,12,16))  # eigths until chord change
+      duration = random.choice((2,4,4,4,6,6,8,8,8,8,10,10,12,12,14,16))  # eigths until chord change
       roman = RomanNumeral(chord_choice)   # Convert string into a generic Roman I/IV/etc chord
 
       # Add piano part
@@ -115,16 +115,17 @@ def generate_song():
             piano.append(Rest(quarterLength=0.5))
             filled += 1
 
-      # Create quarter note walking bassline
+      # Create quarter note walking bassline, on chord notes
+      chord_notes = [str(p) for p in roman.pitches]
+      # add reversed tail of walk (but don't repeat the top or bottom)
+      walk_notes = chord_notes + chord_notes[-2::-1]
+      print walk_notes
       for pos in range(0, duration, 2):   # 2 as we want quarter notes, duration is in eigths
-         # Walk up and down chord notes
-         chord_notes = [str(p) for p in roman.pitches]
-         # FIXME add reversed tail of walk here
-         note = Note(chord_notes[pos%len(chord_notes)])  # Wrap back to start
-         note.octave -= 2
-         bass.append(note)
-
          # TODO ending riff if last chord
+         note = Note(walk_notes[pos/2%len(walk_notes)])  # Wrap back to start
+         note.octave -= 2
+         print note
+         bass.append(note)
 
    return score
 
