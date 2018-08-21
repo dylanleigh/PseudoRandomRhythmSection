@@ -1,6 +1,6 @@
 #
 # Dylan Leigh August 2018
-# TODO frontmatter goes here
+# FIXME frontmatter goes here
 # 
 
 import sys
@@ -16,6 +16,9 @@ from music21.chord import Chord
 #from music21.interval import Interval
 
 
+# NOTE: This progression generator was nicked from an earlier project
+# to generate techno :)
+# TODO: Add more chord types
 class ProgressionGenerator:
    def __init__(self):
       self.chords = ['I']    # Work backwards from I
