@@ -118,13 +118,11 @@ def generate_song():
       # Create quarter note walking bassline, on chord notes
       chord_notes = [str(p) for p in roman.pitches]
       # add reversed tail of walk (but don't repeat the top or bottom)
-      walk_notes = chord_notes + chord_notes[-2::-1]
-      print walk_notes
+      walk_notes = chord_notes + chord_notes[-2:0:-1]
       for pos in range(0, duration, 2):   # 2 as we want quarter notes, duration is in eigths
          # TODO ending riff if last chord
          note = Note(walk_notes[pos/2%len(walk_notes)])  # Wrap back to start
          note.octave -= 2
-         print note
          bass.append(note)
 
    return score
