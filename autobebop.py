@@ -99,11 +99,12 @@ def generate_song():
 
             # TODO ending riff at end of song
 
-            # invert chord randomly TODO something smarter here
-            chord.inversion(random.randint(0,len(chord.pitches)-1))
+            # invert chord randomly, root inversion twice as likely as others
+            max_inv=len(chord.pitches)
+            chord.inversion(random.randint(0,max_inv)%max_inv)
 
             # Randomly hold notes for longer if we have longer before
-            # the next chord change TODO more stylish rhythm here
+            # the next chord change
             max_length = min(duration-filled, 4)      # Cap at 1/2 bar
             length = random.randint(1,max_length)
 
