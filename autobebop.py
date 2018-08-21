@@ -102,6 +102,23 @@ def add_piano_riff(roman, duration, piano):
          filled += 1
 
 
+def add_bass_walk(roman, duration, bass):
+   '''Given a Roman chord, duration in eights/quavers and a bass part,
+      generate a walking bass up and down the chord notes.
+      Note although duration is in eigths, the bassline will be
+      quarter notes, on beat.'''
+
+   # Create quarter note walking bassline, on chord notes
+   chord_notes = [str(p) for p in roman.pitches]
+   # add reversed tail of walk (but don't repeat the top or bottom)
+   walk_notes = chord_notes + chord_notes[-2:0:-1]
+   for pos in range(0, duration, 2):   # 2 as we want quarter notes, duration is in eigths
+      # TODO ending riff if last chord
+      note = Note(walk_notes[pos/2%len(walk_notes)])  # Wrap back to start
+      note.octave -= 2
+      bass.append(note)
+
+
 def generate_song():
    '''Generate a random song and return as a Music21 score'''
    # Start with a blank score
@@ -126,17 +143,8 @@ def generate_song():
       roman = RomanNumeral(chord_choice)   # Convert string into a generic Roman I/IV/etc chord
 
       add_piano_riff(roman, duration, piano)
-
-
-      # Create quarter note walking bassline, on chord notes
-      chord_notes = [str(p) for p in roman.pitches]
-      # add reversed tail of walk (but don't repeat the top or bottom)
-      walk_notes = chord_notes + chord_notes[-2:0:-1]
-      for pos in range(0, duration, 2):   # 2 as we want quarter notes, duration is in eigths
-         # TODO ending riff if last chord
-         note = Note(walk_notes[pos/2%len(walk_notes)])  # Wrap back to start
-         note.octave -= 2
-         bass.append(note)
+      add_bass_walk(roman, duration, bass)
+      # TODO drum part
 
    return score
 
