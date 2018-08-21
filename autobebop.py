@@ -105,8 +105,7 @@ def generate_song():
 
             # Randomly hold notes for longer if we have longer before
             # the next chord change TODO more stylish rhythm here
-            # TODO: ?? max_length = max(duration-filled, 8)      # Cap at 1 bar
-            max_length = duration-filled
+            max_length = min(duration-filled, 8)      # Cap at 1 bar
             length = random.randint(1,max_length)
 
             chord.quarterLength = length/2.0      # length is in eighths
