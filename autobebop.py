@@ -7,7 +7,7 @@ import sys
 import random
 from copy import deepcopy
 
-from music21.instrument import Piano, AcousticBass
+from music21.instrument import Piano, AcousticBass, HiHatCymbal
 from music21.roman import RomanNumeral
 from music21.stream import Part, Measure, Score
 from music21.converter.subConverters import ConverterMusicXML
@@ -61,7 +61,8 @@ class ProgressionGenerator:
 
 def abort_with_usage():
    '''Abort with a usage message to STDERR'''
-   sys.exit('Usage: autobebop.py > music.mxl\n')
+   # FIXME define output file on cli...
+   sys.exit('Usage: python autobebop.py; musescore /tmp/music21/output.xml\n')
 
 
 def quaver_length():
@@ -126,6 +127,7 @@ def generate_song():
    '''Generate a random song and return as a Music21 score'''
    # Start with a blank score
    score = Score()
+   # TODO: Add swing rhythm indicator outside musescore
 
    # Add tracks/intstruments - names etc will be set automatically
    piano = Part()
@@ -136,13 +138,21 @@ def generate_song():
    bass.insert(0, AcousticBass())
    score.insert(0,bass)
 
+   #hihat = Part()   TODO
+
    # Get a random progression
    prog = ProgressionGenerator()
    prog.generate(15)       # TODO longer, make CLI opt
 
    # Go through the progression, adding a comp for each chord
    for chord_choice in prog.chords:
-      duration = random.choice((2,4,4,4,6,6,8,8,8,8,10,10,12,12,14,16))  # eigths until chord change
+      # Duration = eights until the next chord change.
+      # longer on "important" chords (I,IV,V)
+      if chord_choice in ('I', 'IV', 'V', 'V7'):
+         duration = random.choice((8,8,8,8,10,10,12,12,14,16))
+      else:
+         duration = random.choice((2,4,4,4,6,6,8,8,8,8))
+
       roman = RomanNumeral(chord_choice)   # Convert string into a generic Roman I/IV/etc chord
 
       add_piano_riff(roman, duration, piano)
