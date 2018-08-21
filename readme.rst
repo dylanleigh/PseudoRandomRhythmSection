@@ -47,29 +47,34 @@ Algorithm
 
 (This may change as improvements are made)
 
-Autobebop puts a tonic chord at either end and then works backwards,
-making a weighted random choice between chords that tend to resolve to
-the "current" chord. For example::
+To generate the chord progression, PRRS puts a tonic chord at either
+end and then works backwards, making a weighted random choice between
+chords that tend to resolve to the "current" chord. For example::
 
-   I                       I
-   I                 V     I
-   I           ii    V     I
-   I     vi    ii    V     I
+      I                       I
+      I                 V     I
+      I           ii    V     I
+      I     vi    ii    V     I
 
-The individual notes of the melody are then chosen in a similarly
-random fashion favouring notes that are part of the current chord.
-Notes part of the current chord are also more likely to be given a
-longer duration.
+Then the actual notes are generated working forwards. First a duration
+is chosen for the current chord, then for each instrument a function
+is called to generate notes for that duration. Chords that are more
+cadentially significant are more likely to have a longer duration.
+
+The bass part is just a simple walking bassline with little variation.
+The piano plays the current chord using a random inversion (weighted
+towards the root) and random note length and rests (weighted to rest
+more on the beat to syncopate off the bassline). There is also a
+special function for each instrument to do a random closing riff at
+the end of the song.
 
 TODO
 ====
 
-- Piano Chords working
-- Alto notes (quavers) working
-- Varied note durations
-- Rests
-- Swing Beat
-- Piano does some comping rhythm
-- Other keys (defaults to C)
-- Include chord symbols in the score
-- Chord inversions in the comp
+- CLI options for stuff
+- Drum kit (start with hihat at least)
+- Swing Beat set (may not be able to do this within music21 :( )
+- Include chord symbols in the score (ditto, :( )
+- More varied bassline - occasional quavers, runs, fills etc
+- More varied piano - some passing notes and skeletal chords etc
+- Other keys (defaults to C in output but roman notation used in code)
