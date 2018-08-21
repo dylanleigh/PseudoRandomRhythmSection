@@ -92,9 +92,8 @@ def generate_song():
       # Add piano part
       filled = 0
       while filled < duration:
-         # 1/3 chance to rest if off beat , 1/2 chance to rest if on
-         # the beat = more syncopated rhythm to piano
-         if random.randint(0, 1 + filled%2):
+         # NOTE: higher chance to rest if on beat = more syncopated rhythm to piano
+         if random.randint(0, 1 + filled%2 + filled%4):
             # XXX: Must deepcopy, do not change original or it will break bassline
             chord = Chord(deepcopy(roman.pitches))
 
@@ -105,7 +104,7 @@ def generate_song():
 
             # Randomly hold notes for longer if we have longer before
             # the next chord change TODO more stylish rhythm here
-            max_length = min(duration-filled, 8)      # Cap at 1 bar
+            max_length = min(duration-filled, 4)      # Cap at 1/2 bar
             length = random.randint(1,max_length)
 
             chord.quarterLength = length/2.0      # length is in eighths
