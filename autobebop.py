@@ -66,6 +66,42 @@ def quaver_length():
    return random.choice((0.25,0.25, 0.5,0.5,0.5,0.5, 1.0))
 
 
+def add_piano_riff(roman, duration, piano):
+   '''Given a Roman chord, duration in eighths/quavers and a keyboard
+      part, generate a riff and add it to the keyboard part'''
+
+   # Add piano part
+   filled = 0
+   while filled < duration:
+      # NOTE: higher chance to rest if on beat = more syncopated rhythm to piano
+      if random.randint(0, 1 + filled%2 + filled%4):
+         # XXX: Must deepcopy, do not change original or it will break bassline
+         chord = Chord(deepcopy(roman.pitches))
+
+         # TODO ending riff at end of song
+
+         # invert chord randomly, root inversion twice as likely as others
+         max_inv=len(chord.pitches)
+         chord.inversion(random.randint(0,max_inv)%max_inv)
+
+         # Randomly hold notes for longer if we have longer before
+         # the next chord change
+         max_length = min(duration-filled, 4)      # Cap at 1/2 bar
+         length = random.randint(1,max_length)
+         chord.quarterLength = length/2.0      # length is in eighths
+
+         # Add an extra root note 1 octave lower
+         root = deepcopy(chord.root())
+         root.octave -= 1
+         chord.add(root)
+
+         piano.append(chord)
+         filled += length
+      else:
+         piano.append(Rest(quarterLength=0.5))
+         filled += 1
+
+
 def generate_song():
    '''Generate a random song and return as a Music21 score'''
    # Start with a blank score
@@ -89,36 +125,8 @@ def generate_song():
       duration = random.choice((2,4,4,4,6,6,8,8,8,8,10,10,12,12,14,16))  # eigths until chord change
       roman = RomanNumeral(chord_choice)   # Convert string into a generic Roman I/IV/etc chord
 
-      # Add piano part
-      filled = 0
-      while filled < duration:
-         # NOTE: higher chance to rest if on beat = more syncopated rhythm to piano
-         if random.randint(0, 1 + filled%2 + filled%4):
-            # XXX: Must deepcopy, do not change original or it will break bassline
-            chord = Chord(deepcopy(roman.pitches))
+      add_piano_riff(roman, duration, piano)
 
-            # TODO ending riff at end of song
-
-            # invert chord randomly, root inversion twice as likely as others
-            max_inv=len(chord.pitches)
-            chord.inversion(random.randint(0,max_inv)%max_inv)
-
-            # Randomly hold notes for longer if we have longer before
-            # the next chord change
-            max_length = min(duration-filled, 4)      # Cap at 1/2 bar
-            length = random.randint(1,max_length)
-            chord.quarterLength = length/2.0      # length is in eighths
-
-            # Add an extra root note 1 octave lower
-            root = deepcopy(chord.root())
-            root.octave -= 1
-            chord.add(root)
-
-            piano.append(chord)
-            filled += length
-         else:
-            piano.append(Rest(quarterLength=0.5))
-            filled += 1
 
       # Create quarter note walking bassline, on chord notes
       chord_notes = [str(p) for p in roman.pitches]
