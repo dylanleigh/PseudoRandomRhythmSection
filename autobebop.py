@@ -82,7 +82,7 @@ def add_piano_riff(roman, duration, piano):
          # XXX: Must deepcopy, do not change original or it will break bassline
          chord = Chord(deepcopy(roman.pitches))
 
-         # TODO ending riff at end of song
+         # FIXME ending riff at end of song - ??
 
          # invert chord randomly, root inversion twice as likely as others
          max_inv=len(chord.pitches)
@@ -112,15 +112,30 @@ def add_bass_walk(roman, duration, bass):
       Note although duration is in eigths, the bassline will be
       quarter notes, on beat.'''
 
-   # Create quarter note walking bassline, on chord notes
    chord_notes = [str(p) for p in roman.pitches]
    # add reversed tail of walk (but don't repeat the top or bottom)
    walk_notes = chord_notes + chord_notes[-2:0:-1]
    for pos in range(0, duration, 2):   # 2 as we want quarter notes, duration is in eigths
-      # TODO ending riff if last chord
       note = Note(walk_notes[pos/2%len(walk_notes)])  # Wrap back to start
       note.octave -= 2
       bass.append(note)
+
+
+def add_bass_closing(roman, duration, bass):
+   '''Generate a closing riff for the bassline, given chord and
+      duration in eighths'''
+   filled = 0
+   length_weight = 2    # Longer notes later in the bar
+   root = roman.root()  # Root pitch of the chord (NOT a note object)
+   while filled < duration:
+      note = Note(deepcopy(root))
+      length = min(random.randint(1,length_weight),duration-filled) # cap at time left
+      note.quarterLength = length/2.0
+
+      note.octave -= 2
+      bass.append(note)
+      filled += length
+      length_weight += length # Longer notes later in the bar
 
 
 def generate_song():
@@ -159,6 +174,9 @@ def generate_song():
       add_bass_walk(roman, duration, bass)
       # TODO drum part
 
+   # ending riff on last chord
+   add_piano_riff(RomanNumeral('I'), 8, piano)     # FIXME TODO
+   add_bass_closing(RomanNumeral('I'), 8, bass)
    return score
 
 
