@@ -107,8 +107,13 @@ def generate_song():
             # the next chord change
             max_length = min(duration-filled, 4)      # Cap at 1/2 bar
             length = random.randint(1,max_length)
-
             chord.quarterLength = length/2.0      # length is in eighths
+
+            # Add an extra root note 1 octave lower
+            root = deepcopy(chord.root())
+            root.octave -= 1
+            chord.add(root)
+
             piano.append(chord)
             filled += length
          else:
