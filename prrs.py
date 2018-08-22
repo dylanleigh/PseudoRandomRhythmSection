@@ -22,7 +22,7 @@ from music21.harmony import Harmony    # FIXME use to print chord symbols
 # TODO: Add more chord types
 class ProgressionGenerator:
    def __init__(self):
-      self.chords = ['Imaj7']    # Work backwards from I
+      self.chords = ['V7']    # Work backwards from V7 - a ending riff on I will be added after
 
    def __str__(self):
       return str(self.chords)
@@ -186,10 +186,12 @@ def generate_song():
 
    # Get a random progression
    prog = ProgressionGenerator()
-   prog.generate(15)       # TODO make CLI opt
+   prog.generate(15)  # 15 changes tends to ~= 1 page of output   # TODO make CLI opt
 
    # Go through the progression, adding a comp for each chord
    for chord_choice in prog.chords:
+      # FIXME add Harmony/Chord Symbol to score!
+
       # Duration = eights until the next chord change.
       # at least 1 bar on "important" chords (I,IV,V)
       if chord_choice in ('Imaj7', 'IVmaj7', 'V7'):
