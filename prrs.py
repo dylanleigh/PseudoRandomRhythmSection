@@ -205,9 +205,10 @@ def generate_song():
       add_bass_walk(roman, duration, bass)
       # TODO drum part
 
-   # ending riff on last bar
-   add_piano_closing(RomanNumeral('Imaj7'), 8, piano)
-   add_bass_closing(RomanNumeral('Imaj7'), 8, bass)
+   # ending riff on last bar or two
+   duration = random.choice((8,8,16))
+   add_piano_closing(RomanNumeral('Imaj7'), duration, piano)
+   add_bass_closing(RomanNumeral('Imaj7'), duration, bass)
    return score
 
 
