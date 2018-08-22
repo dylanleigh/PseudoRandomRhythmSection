@@ -15,7 +15,7 @@ from music21.note import Note, Rest
 from music21.chord import Chord
 #from music21.interval import Interval TODO for more varied fills
 from music21.volume import Volume
-from music21.harmony import Harmony    # FIXME use to print chord symbols
+from music21.harmony import ChordSymbol, chordSymbolFigureFromChord
 
 
 # TODO: Replace all this with a matrix of from-chord -> relative-probability -> to-chord
@@ -72,13 +72,19 @@ def add_piano_riff(roman, duration, piano):
    '''Given a Roman chord, duration in eighths/quavers and a keyboard
       part, generate a riff and add it to the keyboard part'''
 
-   # Add piano part
+   # Add a chord symbol at the start
+   symbol = ChordSymbol(chordSymbolFigureFromChord(roman))
+   print symbol  # TODO make a cli opt to show/suppress this
+   piano.append(symbol)
+
+   # Add the actual notes
    filled = 0
    while filled < duration:
       # NOTE: higher chance to rest if on beat = more syncopated rhythm to piano
       if random.randint(0, 1 + filled%2 + filled%4):
          # XXX: Must deepcopy, do not change original or it will break bassline
          chord = Chord(deepcopy(roman.pitches))
+
 
          # invert chord randomly, root inversion twice as likely as others
          max_inv=len(chord.pitches)
@@ -97,6 +103,7 @@ def add_piano_riff(roman, duration, piano):
          root.octave -= 1
          chord.add(root)
 
+         # Add the chord at soft volume and update duration
          chord.volume = Volume(velocity=16,velocityIsRelative=False)
          piano.append(chord)
          filled += length
@@ -107,6 +114,10 @@ def add_piano_riff(roman, duration, piano):
 
 def add_piano_closing(roman, duration, piano):
    '''Generate a closing riff and add it to the keyboard part'''
+   symbol = ChordSymbol(chordSymbolFigureFromChord(roman))
+   print symbol  # TODO make a cli opt to show/suppress this
+   piano.append(symbol)    # Leadsheet chord symbol
+
    filled = 0
    length_weight = 2    # Longer notes later in the bar
    root = roman.root()  # Root pitch of the chord (NOT a note object)
@@ -191,8 +202,6 @@ def generate_song():
    # Go through the progression, adding a comp for each chord
    for chord_choice in prog.chords:
       roman = RomanNumeral(chord_choice)   # Convert string into a generic Roman I/IV/etc chord
-      #harm = Harmony(roman) # FIXME add Harmony/Chord Symbol to score
-      #score.append(harm)  # XXX needs to be added to part, simultaneous with actual notes
 
       # Duration = eights until the next chord change.
       # at least 1 bar on "important" chords (I,IV,V)
