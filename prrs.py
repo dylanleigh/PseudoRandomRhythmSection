@@ -19,7 +19,7 @@ from music21.volume import Volume
 from music21.harmony import ChordSymbol, chordSymbolFigureFromChord
 
 
-# TODO: Replace all this with a matrix of from-chord -> relative-probability -> to-chord
+# TODO: Replace all this with a matrix of from-chord -> # relative-probability -> to-chord ?
 # TODO: Add more chord types
 class ProgressionGenerator:
    def __init__(self):
@@ -58,13 +58,14 @@ class ProgressionGenerator:
          self.chords.insert(0, curr)
 
 
-def add_piano_riff(roman, duration, piano):
+def add_piano_riff(roman, duration, piano, show_symbols=False):
    '''Given a Roman chord, duration in eighths/quavers and a keyboard
       part, generate a riff and add it to the keyboard part'''
 
    # Add a chord symbol at the start
    symbol = ChordSymbol(chordSymbolFigureFromChord(roman))
-   print symbol  # TODO make a cli opt to show/suppress this
+   if show_symbols:
+      print symbol
    piano.append(symbol)
 
    # Add the actual notes
@@ -102,10 +103,11 @@ def add_piano_riff(roman, duration, piano):
          filled += 1
 
 
-def add_piano_closing(roman, duration, piano):
+def add_piano_closing(roman, duration, piano, show_symbols=False):
    '''Generate a closing riff and add it to the keyboard part'''
    symbol = ChordSymbol(chordSymbolFigureFromChord(roman))
-   print symbol  # TODO make a cli opt to show/suppress this
+   if show_symbols:
+      print symbol
    piano.append(symbol)    # Leadsheet chord symbol
 
    filled = 0
@@ -167,8 +169,10 @@ def add_bass_closing(roman, duration, bass):
       length_weight += length # Longer notes later in the bar
 
 
-def generate_song():
-   '''Generate a random song and return as a Music21 score'''
+def generate_song(chord_length=15,show_symbols=False):
+   '''Generate a random chord progression with a piano/bass comp and
+      return as a Music21 score. Default length of 15 chord changes
+      (plus the fixed ones at start/end) makes a score about one A4 page.'''
    # Start with a blank score
    score = Score()
    # TODO: Add swing rhythm indicator without having to do it manually
@@ -187,7 +191,7 @@ def generate_song():
 
    # Get a random progression
    prog = ProgressionGenerator()
-   prog.generate(15)  # 15 changes tends to ~= 1 page of output   # TODO make CLI opt
+   prog.generate(chord_length)
 
    # Go through the progression, adding a comp for each chord
    for chord_choice in prog.chords:
@@ -200,21 +204,33 @@ def generate_song():
       else: # 1 bar or less on "minor" (pun intended) chords
          duration = random.choice((2,4,4,4,6,6,8,8,8,8))
 
-      add_piano_riff(roman, duration, piano)
+      add_piano_riff(roman, duration, piano, show_symbols)
       add_bass_walk(roman, duration, bass)
       # TODO drum part
 
    # ending riff on last bar or two
    duration = random.choice((8,8,16))
-   add_piano_closing(RomanNumeral('Imaj7'), duration, piano)
+   add_piano_closing(RomanNumeral('Imaj7'), duration, piano, show_symbols)
    add_bass_closing(RomanNumeral('Imaj7'), duration, bass)
    return score
 
 
-# start main function
+# start main entry point - cli arg processing
 if __name__ == '__main__':
-   parser = argparse.ArgumentParser()
-   parser.add_argument("outputfile")
+   parser = argparse.ArgumentParser(
+      description="Generate a score with a random chord progression and accompaniment"
+   )
+   parser.add_argument("outputfile", help="Name of the output MusicXML file")
+   parser.add_argument(
+      "--show-symbols",
+      help="Print chord symbols to standard output during generation",
+      action='store_true',
+   )
+   parser.add_argument(
+      "--chord-length",
+      help="Number of chords in progression (default 15)",
+      default=15,
+   )
    args = parser.parse_args()
 
-   generate_song().write("musicxml",args.outputfile)
+   generate_song(int(args.chord_length),args.show_symbols).write("musicxml",args.outputfile)

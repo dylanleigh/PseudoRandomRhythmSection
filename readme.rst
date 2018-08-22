@@ -34,10 +34,10 @@ Musescore::
    $ python prrs.py output.xml
    $ musescore output.xml
 
-Or::
-   $ python prrs.py output.xml && musescore output.xml
+Alternatively::
+   $ python prrs.py output.xml --show-symbols && musescore output.xml &
 
-**Warning: The file will be clobbered if it already exists.**
+**Warning: The output file will be clobbered if it already exists.**
 
 For full commandline options use --help.
 
