@@ -190,7 +190,9 @@ def generate_song():
 
    # Go through the progression, adding a comp for each chord
    for chord_choice in prog.chords:
-      # FIXME add Harmony/Chord Symbol to score!
+      roman = RomanNumeral(chord_choice)   # Convert string into a generic Roman I/IV/etc chord
+      #harm = Harmony(roman) # FIXME add Harmony/Chord Symbol to score
+      #score.append(harm)  # XXX needs to be added to part, simultaneous with actual notes
 
       # Duration = eights until the next chord change.
       # at least 1 bar on "important" chords (I,IV,V)
@@ -198,8 +200,6 @@ def generate_song():
          duration = random.choice((8,8,8,8,10,10,12,12,14,16))
       else: # 1 bar or less on "minor" (pun intended) chords
          duration = random.choice((2,4,4,4,6,6,8,8,8,8))
-
-      roman = RomanNumeral(chord_choice)   # Convert string into a generic Roman I/IV/etc chord
 
       add_piano_riff(roman, duration, piano)
       add_bass_walk(roman, duration, bass)
