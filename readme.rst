@@ -1,26 +1,24 @@
 
-::::::::::::::::::::::::::::::::::::
-autobebop - A chord/melody generator
-::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+PseudoRandomRhythmSection - Generate a random swing progression & comp
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-TODO: Rename - AutoJazzComp ? PseudoRandomRhythmSection
+Dylan Leigh - August 2018
 
-Dylan Leigh August 2018
-
-Generates a pseudorandom chord progression and a melody to go with it,
-outputs a score in MusicXML.
+Generates a pseudorandom chord progression and piano/bass comp to go
+with it, outputs a score in MusicXML.
 
 Installation/Requirements
 =========================
 
 Other than Python the only hard requirement is the Music21 library
-[http://web.mit.edu/music21/] which is used for writing the MusicXML.
+http://web.mit.edu/music21/ which is used for writing the MusicXML.
 
 A pip requirements file is provided, and it is recommended that
 Virtualenv or a similar system be used for a clean environment::
 
-   virtualenv autobebop
-   cd autobebop
+   virtualenv prrs
+   cd prrs
    . bin/activate
    git clone http://git/TODO
    pip install -r requirements.txt
@@ -34,12 +32,12 @@ By default, the song will be saved in /tmp/ and the name will be
 printed to standard output, so it can be easily opened with
 Musescore or other MusicXML software::
 
-   $ python autobebop.py
-   /tmp/music21/tmpF1MSXf.xml
+   $ python prrs.py
+   musescore /tmp/music21/tmpF1MSXf.xml
    $ musescore /tmp/music21/tmpF1MSXf.xm
 
 Or::
-   $ musescore `python autobebop.py`
+   $ `python prrs.py`
 
 
 Algorithm
