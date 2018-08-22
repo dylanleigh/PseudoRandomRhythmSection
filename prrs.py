@@ -17,6 +17,7 @@ from music21.chord import Chord
 from music21.volume import Volume
 
 
+# TODO: Replace all this with a matrix of from-chord -> relative-probability -> to-chord
 # TODO: Add more chord types
 class ProgressionGenerator:
    def __init__(self):
@@ -26,28 +27,28 @@ class ProgressionGenerator:
       return str(self.chords)
 
    def before_Imaj7(self):
-      return random.choice(['IV','IV','V','V','V7','V7','viio'])
+      return random.choice(['IVmaj7','IVmaj7','V7','V7','viio'])
 
    def before_ii(self):
-      return random.choice(['Imaj7','iii','IV','vi'])
+      return random.choice(['Imaj7','iii','IVmaj7','vi'])
 
    def before_iii(self):
-      return random.choice(['Imaj7','ii','IV'])
+      return random.choice(['Imaj7','ii','IVmaj7'])
 
-   def before_IV(self):
+   def before_IVmaj7(self):
       return random.choice(['Imaj7','iii','vi'])
 
    def before_V(self):
-      return random.choice(['Imaj7','ii','IV','vi'])
+      return random.choice(['Imaj7','ii','IVmaj7','vi'])
 
    def before_V7(self):
-      return random.choice(['Imaj7','ii','IV','vi'])
+      return random.choice(['Imaj7','ii','IVmaj7','vi'])
 
    def before_vi(self):
       return random.choice(['Imaj7','iii','V'])
 
    def before_viio(self):
-      return random.choice(['Imaj7','ii','IV'])
+      return random.choice(['Imaj7','ii','IVmaj7'])
 
    def generate(self, min_length=2):
       curr = self.chords[0]
@@ -194,7 +195,7 @@ def generate_song():
    for chord_choice in prog.chords:
       # Duration = eights until the next chord change.
       # longer on "important" chords (I,IV,V)
-      if chord_choice in ('Imaj7', 'IV', 'V', 'V7'):
+      if chord_choice in ('Imaj7', 'IVmaj7', 'V', 'V7'):
          duration = random.choice((8,8,8,8,10,10,12,12,14,16))
       else:
          duration = random.choice((2,4,4,4,6,6,8,8,8,8))
