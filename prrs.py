@@ -30,13 +30,13 @@ class ProgressionGenerator:
       return random.choice(['IVmaj7','IVmaj7','V7','V7','viio'])
 
    def before_iim7(self):
-      return random.choice(['Imaj7','iii','IVmaj7','vi'])
+      return random.choice(['Imaj7','iiim7','IVmaj7','vi'])
 
-   def before_iii(self):
+   def before_iiim7(self):
       return random.choice(['Imaj7','iim7','IVmaj7'])
 
    def before_IVmaj7(self):
-      return random.choice(['Imaj7','iii','vi'])
+      return random.choice(['Imaj7','iiim7','vi'])
 
    def before_V(self):
       return random.choice(['Imaj7','iim7','IVmaj7','vi'])
@@ -45,7 +45,7 @@ class ProgressionGenerator:
       return random.choice(['Imaj7','iim7','IVmaj7','vi'])
 
    def before_vi(self):
-      return random.choice(['Imaj7','iii','V'])
+      return random.choice(['Imaj7','iiim7','V7'])
 
    def before_viio(self):
       return random.choice(['Imaj7','iim7','IVmaj7'])
@@ -193,10 +193,10 @@ def generate_song():
    # Go through the progression, adding a comp for each chord
    for chord_choice in prog.chords:
       # Duration = eights until the next chord change.
-      # longer on "important" chords (I,IV,V)
-      if chord_choice in ('Imaj7', 'IVmaj7', 'V', 'V7'):
+      # at least 1 bar on "important" chords (I,IV,V)
+      if chord_choice in ('Imaj7', 'IVmaj7', 'V7'):
          duration = random.choice((8,8,8,8,10,10,12,12,14,16))
-      else:
+      else: # 1 bar or less on "minor" (pun intended) chords
          duration = random.choice((2,4,4,4,6,6,8,8,8,8))
 
       roman = RomanNumeral(chord_choice)   # Convert string into a generic Roman I/IV/etc chord
