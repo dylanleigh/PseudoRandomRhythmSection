@@ -29,7 +29,8 @@ class ProgressionGenerator:
       return str(self.chords)
 
    def before_Imaj7(self):
-      return random.choice(['IVmaj7','IVmaj7','V7','V7','viio'])
+      # Make IV more likely than V, so avoid false end of tune effect
+      return random.choice(['IVmaj7','IVmaj7','V7','viio'])
 
    def before_iim7(self):
       return random.choice(['Imaj7','iiim7','IVmaj7','vim7'])
