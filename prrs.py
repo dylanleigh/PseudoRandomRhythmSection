@@ -13,46 +13,45 @@ from music21.stream import Part, Measure, Score
 from music21.converter.subConverters import ConverterMusicXML
 from music21.note import Note, Rest
 from music21.chord import Chord
-#from music21.interval import Interval
+#from music21.interval import Interval TODO for more varied fills
+from music21.volume import Volume
 
 
-# NOTE: This progression generator was nicked from an earlier project
-# to generate techno :)
 # TODO: Add more chord types
 class ProgressionGenerator:
    def __init__(self):
-      self.chords = ['I']    # Work backwards from I
+      self.chords = ['Imaj7']    # Work backwards from I
 
    def __str__(self):
       return str(self.chords)
 
-   def before_I(self):
+   def before_Imaj7(self):
       return random.choice(['IV','IV','V','V','V7','V7','viio'])
 
    def before_ii(self):
-      return random.choice(['I','iii','IV','vi'])
+      return random.choice(['Imaj7','iii','IV','vi'])
 
    def before_iii(self):
-      return random.choice(['I','ii','IV'])
+      return random.choice(['Imaj7','ii','IV'])
 
    def before_IV(self):
-      return random.choice(['I','iii','vi'])
+      return random.choice(['Imaj7','iii','vi'])
 
    def before_V(self):
-      return random.choice(['I','ii','IV','vi'])
+      return random.choice(['Imaj7','ii','IV','vi'])
 
    def before_V7(self):
-      return random.choice(['I','ii','IV','vi'])
+      return random.choice(['Imaj7','ii','IV','vi'])
 
    def before_vi(self):
-      return random.choice(['I','iii','V'])
+      return random.choice(['Imaj7','iii','V'])
 
    def before_viio(self):
-      return random.choice(['I','ii','IV'])
+      return random.choice(['Imaj7','ii','IV'])
 
    def generate(self, min_length=2):
       curr = self.chords[0]
-      while len(self.chords) < min_length or curr != 'I':
+      while len(self.chords) < min_length or curr != 'Imaj7':
          func = getattr(self, "before_%s" % curr)
          curr = func()
          self.chords.insert(0, curr)
@@ -86,6 +85,8 @@ def add_piano_riff(roman, duration, piano):
          max_inv=len(chord.pitches)
          chord.inversion(random.randint(0,max_inv)%max_inv)
 
+         # TODO try randomly ommitting some chord notes
+
          # Randomly hold notes for longer if we have longer before
          # the next chord change
          max_length = min(duration-filled, 4)      # Cap at 1/2 bar
@@ -95,6 +96,8 @@ def add_piano_riff(roman, duration, piano):
          # Add an extra root note 1 octave lower
          root = deepcopy(chord.root())
          root.octave -= 1
+
+         chord.volume = Volume(velocity=32)
          chord.add(root)
 
          piano.append(chord)
@@ -191,7 +194,7 @@ def generate_song():
    for chord_choice in prog.chords:
       # Duration = eights until the next chord change.
       # longer on "important" chords (I,IV,V)
-      if chord_choice in ('I', 'IV', 'V', 'V7'):
+      if chord_choice in ('Imaj7', 'IV', 'V', 'V7'):
          duration = random.choice((8,8,8,8,10,10,12,12,14,16))
       else:
          duration = random.choice((2,4,4,4,6,6,8,8,8,8))
@@ -202,9 +205,9 @@ def generate_song():
       add_bass_walk(roman, duration, bass)
       # TODO drum part
 
-   # ending riff on last chord
-   add_piano_closing(RomanNumeral('I'), 8, piano)
-   add_bass_closing(RomanNumeral('I'), 8, bass)
+   # ending riff on last bar
+   add_piano_closing(RomanNumeral('Imaj7'), 8, piano)
+   add_bass_closing(RomanNumeral('Imaj7'), 8, bass)
    return score
 
 
