@@ -5,6 +5,7 @@
 
 import sys
 import random
+import argparse
 from copy import deepcopy
 
 from music21.instrument import Piano, AcousticBass, HiHatCymbal
@@ -54,18 +55,6 @@ class ProgressionGenerator:
          func = getattr(self, "before_%s" % curr)
          curr = func()
          self.chords.insert(0, curr)
-
-# misc functions
-
-def abort_with_usage():
-   '''Abort with a usage message to STDERR'''
-   # FIXME define output file on cli...
-   sys.exit('Usage: python autobebop.py; musescore /tmp/music21/output.xml\n')
-
-
-def quaver_length():
-   '''Return a note length averaging to an eighth note'''
-   return random.choice((0.25,0.25, 0.5,0.5,0.5,0.5, 1.0))
 
 
 def add_piano_riff(roman, duration, piano):
@@ -223,4 +212,8 @@ def generate_song():
 
 # start main function
 if __name__ == '__main__':
-   print("musescore " + generate_song().write("musicxml"))
+   parser = argparse.ArgumentParser()
+   parser.add_argument("outputfile")
+   args = parser.parse_args()
+
+   generate_song().write("musicxml",args.outputfile)

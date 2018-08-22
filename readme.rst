@@ -27,19 +27,19 @@ Virtualenv or a similar system be used for a clean environment::
 Usage
 =====
 
-**Command line options are not stable yet, see the code. Sorry.**
+The file to save to must be specified on the commandline as an
+argument. It can then be opened with any MusicXML software such as
+Musescore::
 
-By default, the song will be saved in /tmp/ and the name will be
-printed to standard output, so it can be easily opened with
-Musescore or other MusicXML software::
-
-   $ python prrs.py
-   musescore /tmp/music21/tmpF1MSXf.xml
-   $ musescore /tmp/music21/tmpF1MSXf.xm
+   $ python prrs.py output.xml
+   $ musescore output.xml
 
 Or::
-   $ `python prrs.py`
+   $ python prrs.py output.xml && musescore output.xml
 
+**Warning: The file will be clobbered if it already exists.**
+
+For full commandline options use --help.
 
 Algorithms
 ==========
