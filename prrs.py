@@ -29,26 +29,26 @@ class ProgressionGenerator:
    def before_Imaj7(self):
       return random.choice(['IVmaj7','IVmaj7','V7','V7','viio'])
 
-   def before_ii(self):
+   def before_iim7(self):
       return random.choice(['Imaj7','iii','IVmaj7','vi'])
 
    def before_iii(self):
-      return random.choice(['Imaj7','ii','IVmaj7'])
+      return random.choice(['Imaj7','iim7','IVmaj7'])
 
    def before_IVmaj7(self):
       return random.choice(['Imaj7','iii','vi'])
 
    def before_V(self):
-      return random.choice(['Imaj7','ii','IVmaj7','vi'])
+      return random.choice(['Imaj7','iim7','IVmaj7','vi'])
 
    def before_V7(self):
-      return random.choice(['Imaj7','ii','IVmaj7','vi'])
+      return random.choice(['Imaj7','iim7','IVmaj7','vi'])
 
    def before_vi(self):
       return random.choice(['Imaj7','iii','V'])
 
    def before_viio(self):
-      return random.choice(['Imaj7','ii','IVmaj7'])
+      return random.choice(['Imaj7','iim7','IVmaj7'])
 
    def generate(self, min_length=2):
       curr = self.chords[0]
@@ -97,10 +97,9 @@ def add_piano_riff(roman, duration, piano):
          # Add an extra root note 1 octave lower
          root = deepcopy(chord.root())
          root.octave -= 1
-
-         chord.volume = Volume(velocity=32)
          chord.add(root)
 
+         chord.volume = Volume(velocity=16,velocityIsRelative=False)
          piano.append(chord)
          filled += length
       else:
