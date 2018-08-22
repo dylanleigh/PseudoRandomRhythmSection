@@ -35,6 +35,7 @@ opened with any MusicXML software such as Musescore::
    $ musescore output.xml
 
 A one-liner::
+
    $ python prrs.py output.xml --show-symbols && musescore output.xml &
 
 **Warning: The output file will be clobbered if it already exists.**
