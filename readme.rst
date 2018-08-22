@@ -50,7 +50,6 @@ To generate the chord progression, PRRS puts a V7 and Imaj7 at the end
 and then works backwards, making a weighted random choice between
 chords that tend to resolve to the "current" chord. For example::
 
-      I                       I
       I                 V     I
       I           ii    V     I
       I     vi    ii    V     I
@@ -65,7 +64,6 @@ The bass part is just a simple walking bassline with little variation.
 The piano plays the current chord using a random inversion (weighted
 in favour of the root inversion) and random note length and rests
 (weighted to rest more on the beat to syncopate off the bassline).
-
 There is also a special function for each instrument to do a random
 closing riff at the end of the song; this is just a random rhythm that
 is increasingly likely to hold the note for longer.
@@ -73,10 +71,11 @@ is increasingly likely to hold the note for longer.
 TODO
 ====
 
-- CLI options for stuff
+- Make duration more likely to be odd if we are already off-beat to
+  even it up
+- CLI options for all sorts of stuff - especially output file name
 - Drum kit (start with hihat at least)
-- Swing Beat set (may not be able to do this within music21 :( )
-- Include chord symbols in the score (ditto, :( )
+- Swing Beat set automatically (also, make piano dynamic piano)
 - More varied bassline - occasional quavers, runs, fills etc
 - More varied piano - some passing notes and skeletal chords etc
 - Other keys (defaults to C in output but roman notation used in code)
