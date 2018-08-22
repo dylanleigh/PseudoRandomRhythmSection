@@ -71,11 +71,12 @@ is increasingly likely to hold the note for longer.
 TODO
 ====
 
+- Swing Beat set automatically without having to add it in musescore
+  (also, make piano dynamic piano)
 - Make duration more likely to be odd if we are already off-beat to
   even it up
-- CLI options for all sorts of stuff - especially output file name
 - Drum kit (start with hihat at least)
-- Swing Beat set automatically (also, make piano dynamic piano)
 - More varied bassline - occasional quavers, runs, fills etc
 - More varied piano - some passing notes and skeletal chords etc
 - Other keys (defaults to C in output but roman notation used in code)
+- Improve performance, don't do unnecessary stuff with music21 objects
