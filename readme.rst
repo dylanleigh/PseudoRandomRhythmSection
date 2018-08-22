@@ -6,7 +6,8 @@ PseudoRandomRhythmSection - Generate a random swing progression & comp
 Dylan Leigh - August 2018
 
 Generates a pseudorandom chord progression and piano/bass comp to go
-with it, outputs a score in MusicXML.
+with it; outputs a score in MusicXML with all parts and chord symbols.
+Ideal for practicing improvisation or ideas for composition.
 
 Installation/Requirements
 =========================
@@ -56,8 +57,9 @@ chords that tend to resolve to the "current" chord. For example::
 
 Then the actual notes are generated working forwards. First a duration
 is chosen for the current chord, then for each instrument a function
-is called to generate notes for that duration. Chords that are more
-cadentially significant are more likely to have a longer duration.
+is called to generate the part for that instrument until the next
+chord change. Chords that are more cadentially significant are more
+likely to have a longer duration.
 
 The bass part is just a simple walking bassline with little variation.
 The piano plays the current chord using a random inversion (weighted
