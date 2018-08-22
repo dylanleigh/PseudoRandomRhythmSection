@@ -30,21 +30,18 @@ class ProgressionGenerator:
       return random.choice(['IVmaj7','IVmaj7','V7','V7','viio'])
 
    def before_iim7(self):
-      return random.choice(['Imaj7','iiim7','IVmaj7','vi'])
+      return random.choice(['Imaj7','iiim7','IVmaj7','vim7'])
 
    def before_iiim7(self):
       return random.choice(['Imaj7','iim7','IVmaj7'])
 
    def before_IVmaj7(self):
-      return random.choice(['Imaj7','iiim7','vi'])
-
-   def before_V(self):
-      return random.choice(['Imaj7','iim7','IVmaj7','vi'])
+      return random.choice(['Imaj7','iiim7','vim7'])
 
    def before_V7(self):
-      return random.choice(['Imaj7','iim7','IVmaj7','vi'])
+      return random.choice(['Imaj7','iim7','IVmaj7','vim7'])
 
-   def before_vi(self):
+   def before_vim7(self):
       return random.choice(['Imaj7','iiim7','V7'])
 
    def before_viio(self):
