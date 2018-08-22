@@ -15,6 +15,7 @@ from music21.note import Note, Rest
 from music21.chord import Chord
 #from music21.interval import Interval TODO for more varied fills
 from music21.volume import Volume
+from music21.harmony import Harmony    # FIXME use to print chord symbols
 
 
 # TODO: Replace all this with a matrix of from-chord -> relative-probability -> to-chord
