@@ -1,7 +1,7 @@
 
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-PseudoRandomRhythmSection - Generate a random swing progression & comp
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::
+PseudoRandomRhythmSection
+:::::::::::::::::::::::::
 
 Dylan Leigh - August 2018
 
@@ -13,7 +13,8 @@ Installation/Requirements
 =========================
 
 Other than Python the only hard requirement is the Music21 library
-http://web.mit.edu/music21/ which is used for writing the MusicXML.
+http://web.mit.edu/music21/ which is used for writing the MusicXML and
+performing chord inversions and similar operations.
 
 A pip requirements file is provided, and it is recommended that
 Virtualenv or a similar system be used for a clean environment::
@@ -27,14 +28,13 @@ Virtualenv or a similar system be used for a clean environment::
 Usage
 =====
 
-The file to save to must be specified on the commandline as an
-argument. It can then be opened with any MusicXML software such as
-Musescore::
+The file to save to must be specified as an argument. It can then be
+opened with any MusicXML software such as Musescore::
 
    $ python prrs.py output.xml
    $ musescore output.xml
 
-Alternatively::
+A one-liner::
    $ python prrs.py output.xml --show-symbols && musescore output.xml &
 
 **Warning: The output file will be clobbered if it already exists.**
