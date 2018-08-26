@@ -61,19 +61,20 @@ is called to generate the part for that instrument until the next
 chord change. Chords that are more cadentially significant are more
 likely to have a longer duration.
 
-The bass part is just a simple walking bassline with little variation.
-The piano plays the current chord using a random inversion (weighted
-in favour of the root inversion) and random note length and rests
-(weighted to rest more on the beat to syncopate off the bassline).
-There is also a special function for each instrument to do a random
-closing riff at the end of the song; this is just a random rhythm that
-is increasingly likely to hold the note for longer.
+The bass part is just a basic walking bassline up and down the chord
+notes. The piano plays the current chord using a random inversion
+(weighted in favour of the root inversion) and random note length and
+rests (weighted to rest more on the beat to syncopate off the
+bassline).  There is also a special function for each instrument to do
+a random closing riff at the end of the song; this is just a random
+rhythm that is increasingly likely to hold the note for longer.
 
 TODO
 ====
 
+- Choose piano chord inversions to fit smoothly with ones before/after
 - Swing Beat set automatically without having to add it in musescore
-  (also, make piano dynamic piano)
+  (not sure how we can do this with music21)
 - Make duration more likely to be odd if we are already off-beat to
   even it up
 - Drum kit (start with hihat at least)
