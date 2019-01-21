@@ -22,7 +22,7 @@ Virtualenv or a similar system be used for a clean environment::
    virtualenv prrs
    cd prrs
    . bin/activate
-   git clone http://git/TODO
+   git clone https://github.com/dylanleigh/PseudoRandomRhythmSection.git
    pip install -r requirements.txt
 
 Usage
